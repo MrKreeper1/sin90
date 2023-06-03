@@ -44,13 +44,14 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        print(event)
     if keys[pygame.K_LEFT]:
         DEG += STEP
     if keys[pygame.K_RIGHT]:
         DEG -= STEP
-        if DEG < 90:
-            DEG = 360 + DEG
-        print(event)
+    if DEG < 90:
+        DEG = 360 + DEG
+        
     #Обновление
     all_sprites.update()
     DEG = (DEG - 90) % 360 + 90
