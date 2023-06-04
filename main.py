@@ -25,7 +25,7 @@ DEG = 90
 RADIUS = 250
 STEP = 1
 
-f1 = pygame.font.Font(None, 36)
+f1 = pygame.font.Font("./res/segoeuibold.ttf", 24)
 
 
 class UCircle(pygame.sprite.Sprite):
@@ -55,16 +55,42 @@ class ARight(pygame.sprite.Sprite):
     def update(self):
         pass
 
+class SLeft(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("./img/aleft.png")
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() // 2, self.image.get_height() // 2))
+        self.rect = self.image.get_rect()
+        self.rect.center = (WIDTH / 2 - 150, HEIGHT - 75)
+        self.rect.width, self.rect.height = self.rect.width // 2, self.rect.height // 2
+    def update(self):
+        pass
+
+class SRight(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("./img/aright.png")
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() // 2, self.image.get_height() // 2))
+        self.rect = self.image.get_rect()
+        self.rect.center = (WIDTH / 2 + 150, HEIGHT - 75)
+        self.rect.width, self.rect.height = self.rect.width // 2, self.rect.height // 2
+    def update(self):
+        pass
+
 running = True
 
 all_sprites = pygame.sprite.Group()
 ucircle = UCircle()
 aleft, aright = ALeft(), ARight()
+sleft, sright = SLeft(), SRight()
 all_sprites.add(ucircle)
 all_sprites.add(aleft)
 all_sprites.add(aright)
+all_sprites.add(sleft)
+all_sprites.add(sright)
 
 l, r = False, False
+
 
 while running:
     clock.tick(FPS)
@@ -78,6 +104,10 @@ while running:
                 l = True
             if aright.rect.collidepoint(event.pos):
                 r = True
+            if sleft.rect.collidepoint(event.pos):
+                DEG += 1
+            if sright.rect.collidepoint(event.pos):
+                DEG -= 1
         elif event.type == pygame.MOUSEBUTTONUP:
             l, r = False, False
         #print(event)
@@ -113,6 +143,10 @@ while running:
     #Ордината
     pygame.draw.line(screen, COLORS["LBLUE"], (WIDTH / 2 + x, HEIGHT / 2), (WIDTH / 2 + x, HEIGHT / 2 + y), 3)
     pygame.draw.circle(screen, COLORS["LBLUE"], (WIDTH / 2 + x, HEIGHT / 2), 5)
+    #Дуга
+    pygame.draw.arc(screen, COLORS["DYELLOW"],
+                    (WIDTH / 2 - 30, HEIGHT / 2 - 30, 60, 60),
+                    0, math.radians(DEG - 90), 3)
     #Текст
     text1 = f1.render(f'Текущий угол: {DEG - 90}°', True,
                   (180, 0, 0))
